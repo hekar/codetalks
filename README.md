@@ -2,10 +2,15 @@
 
 ## Routes
 
-http --json POST http://localhost:5000/api/v1/talk name=example emails:='["example@gmail.com"]'
+```
+pip install httpie
+```
 
+```
+http --json POST http://localhost:5000/api/v1/talk name=example emails:='["example@gmail.com"]'
 http --json GET http://localhost:5000/api/v1/user/1
 http --json POST http://localhost:5000/api/v1/user name=example emails:='["example@gmail.com"]'
+```
 
 ## Install
 
