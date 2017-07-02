@@ -1,15 +1,18 @@
-var path = require('path');
-var webpack = require('webpack');
-var autoprefixer = require('autoprefixer');
-var precss = require('precss');
-var functions = require('postcss-functions');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var plugins = [
-  new webpack.NoErrorsPlugin(),
-  new webpack.optimize.DedupePlugin(),
+let plugins = [
   new ExtractTextPlugin('bundle.css'),
 ];
+
+if (process.env.NODE_ENV === 'development') {
+  plugins = plugins.concat([
+    new webpack.LoaderOptionsPlugin({
+      debug: true
+    })
+  ]);
+}
 
 if (process.env.NODE_ENV === 'production') {
   plugins = plugins.concat([
@@ -23,7 +26,7 @@ if (process.env.NODE_ENV === 'production') {
   ]);
 };
 
-var config  = {
+const config  = {
   entry: {
     bundle: path.join(__dirname, 'client/index.js')
   },
@@ -34,49 +37,25 @@ var config  = {
   },
   plugins: plugins,
   module: {
-    loaders: [
+    rules: [
       {test: /\.css/, loader: ExtractTextPlugin.extract('css-loader')},
       {test: /\.(png|gif)$/, loader: 'url-loader?name=[name]@[hash].[ext]&limit=5000'},
-      {test: /\.svg$/, loader: 'url-loader?name=[name]@[hash].[ext]&limit=5000!svgo-loader?useConfig=svgo1'},
       {test: /\.(pdf|ico|jpg|eot|otf|woff|ttf|mp4|webm)$/, loader: 'file-loader?name=[name]@[hash].[ext]'},
       {test: /\.json$/, loader: 'json-loader'},
       {
         test: /\.jsx?$/,
         include: path.join(__dirname, 'client'),
-        loaders: ['babel']
+        loaders: ['babel-loader']
       }
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.css'],
+    extensions: ['.js', '.jsx', '.css'],
     alias: {
       '#app': path.join(__dirname, 'client'),
       '#c': path.join(__dirname, 'client/components'),
       '#css': path.join(__dirname, 'client/css')
     }
-  },
-  svgo1: {
-    multipass: true,
-    plugins: [
-      // by default enabled
-      {mergePaths: false},
-      {convertTransform: false},
-      {convertShapeToPath: false},
-      {cleanupIDs: false},
-      {collapseGroups: false},
-      {transformsWithOnePath: false},
-      {cleanupNumericValues: false},
-      {convertPathData: false},
-      {moveGroupAttrsToElems: false},
-      // by default disabled
-      {removeTitle: true},
-      {removeDesc: true}
-    ]
-  },
-  postcss: function() {
-    return [
-      autoprefixer
-    ];
   }
 };
 

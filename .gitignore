@@ -8,3 +8,5 @@
 
 .pid
 .DS_Store
+*.log
+*.swp

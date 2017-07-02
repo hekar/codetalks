@@ -1,12 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, hashHistory } from 'react-router';
+import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import toString from './toString';
 import { Promise } from 'when';
 import createRoutes from './routes';
 import { createStore, setAsCurrentStore } from '../store';
-
 
 export function run() {
   // init promise polyfill
@@ -20,7 +19,7 @@ export function run() {
 
   render(
     <Provider store={store} >
-      <Router history={hashHistory}>{createRoutes({store, first: { time: true }})}</Router>
+      <HashRouter>{createRoutes({store, first: { time: true }})}</HashRouter>
     </Provider>,
     document.getElementById('app')
   );

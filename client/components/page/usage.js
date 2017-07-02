@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { IndexLink } from 'react-router';
+import { Link } from 'react-router-dom';
 import { setConfig } from '../../actions';
 
 class Usage extends Component {
@@ -28,7 +28,7 @@ class Usage extends Component {
           {JSON.stringify(this.props.config, null, 2)}</pre>
       </div>
       <br />
-      go <IndexLink to='/'>home</IndexLink>
+      go <Link to='/'>home</Link>
     </div>;
   }
 
