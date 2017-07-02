@@ -18,14 +18,18 @@ class Usage extends Component {
   }
   /*eslint-enable */
 
+  componentDidMount() {
+  }
+
   render() {
+    const str = JSON.stringify(this.props.config, null, 2);
     return <div>
       <Helmet title='Usage' />
       <h2>Usage:</h2>
       <div>
         <span>// TODO: write an article</span>
         <pre>config:
-          {JSON.stringify(this.props.config, null, 2)}</pre>
+          {str}</pre>
       </div>
       <br />
       go <Link to='/'>home</Link>

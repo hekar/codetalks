@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 export default class Nav extends Component {
   render() {
     return (
       <nav className="nav">
         <div className="nav-left">
-          <Link className="nav-item" to={'/'}>CodeTalks
-          </Link>
-          <Link className="nav-item" to={'/talks'}>
+          <NavLink className="nav-item" to={'/'}>CodeTalks
+          </NavLink>
+          <NavLink className="nav-item" to={'/talks'}>
             Talks
-          </Link>
-          <Link className="nav-item" to={'/profile'}>
+          </NavLink>
+          <NavLink className="nav-item" to={'/profile'}>
             Profile
-          </Link>
+          </NavLink>
         </div>
 
         <span className="nav-toggle">
