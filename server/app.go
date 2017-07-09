@@ -29,6 +29,7 @@ type App struct {
 // of main server application.
 func NewApp(opts ...AppOptions) *App {
 	db := pg.Connect(&pg.Options{
+		Database: "postgres",
 		User:     "postgres",
 		Password: "postgres",
 	})

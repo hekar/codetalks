@@ -38,7 +38,7 @@ type TalkMeta struct {
 
 // CreateSchema create the database schema
 func CreateSchema(db *pg.DB) error {
-	for _, model := range []interface{}{&User{}} {
+	for _, model := range []interface{}{&User{},&UserTalk{},&Talk{},&TalkMeta{}} {
 		err := db.CreateTable(model, &orm.CreateTableOptions{
 			Temp: true,
 		})
@@ -46,5 +46,31 @@ func CreateSchema(db *pg.DB) error {
 			return err
 		}
 	}
+
+	user := &User{
+		Name: "This is user",
+		Emails: []string{
+			"user1@example.com",
+		},
+	}
+	err := db.Insert(user)
+	if err != nil {
+		return err
+	}
+
+	talk := &Talk{
+		Name: "This is a talk",
+		Url: "https://youtube.com",
+		ThumbnailUrl: "http://image.example.com",
+		Tags: []string{
+			"youtube",
+		},
+	}
+	err = db.Insert(talk)
+	if err != nil {
+		return err
+	}
+
+
 	return nil
 }
