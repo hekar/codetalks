@@ -1,18 +1,26 @@
 package main
 
 import (
+	"io/ioutil"
+	"net/http"
 	"strconv"
 
+	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/go-pg/pg"
 	"github.com/labstack/echo"
 )
 
+// API contains common state for API controllers
 type API struct {
 	Db *pg.DB
+	Mc *memcache.Client
 }
 
+// SearchTalk result of searching talks
 type SearchTalk struct {
-	talk []Talk
+	Limit  int    `json:"limit"`
+	Offset int    `json:"offset"`
+	Talks  []Talk `json:"talks"`
 }
 
 // Bind setup the API
@@ -20,7 +28,7 @@ func (api *API) Bind(group *echo.Group) {
 	group.GET("/v1/conf", api.conf)
 
 	group.POST("/v1/talk", api.postTalk)
-	group.GET("/v1/talk", api.searchTalk);
+	group.GET("/v1/talk", api.searchTalk)
 	group.GET("/v1/talk/:id", api.getTalk)
 	group.PUT("/v1/talk", api.putTalk)
 
@@ -32,6 +40,8 @@ func (api *API) Bind(group *echo.Group) {
 	group.POST("/v1/user", api.postUser)
 	group.GET("/v1/user/:id", api.getUser)
 	group.PUT("/v1/user/:id", api.putUser)
+
+	group.GET("/v1/yt/json", api.getYoutubeJSON)
 }
 
 func (api *API) conf(c echo.Context) error {
@@ -54,16 +64,30 @@ func (api *API) postTalk(c echo.Context) error {
 }
 
 func (api *API) searchTalk(c echo.Context) error {
-	var talk []Talk
-	err := api.Db.Model(&talk).
+	offset, err := strconv.Atoi(c.Param("offset"))
+	if err != nil {
+		offset = 0
+	}
+
+	limit := 10
+
+	// Filter title, author, rating, site, date posted
+	// Sort by rating, date posted
+	var talks []Talk
+	err = api.Db.Model(&talks).
 		Column("talk.*").
+		Order("talk.name ASC").
+		Limit(limit).
+		Offset(offset).
 		Select()
 	if err != nil {
 		return err
 	}
 
 	searchTalk := SearchTalk{
-		talk: talk,
+		Limit:  limit,
+		Offset: offset,
+		Talks:  talks,
 	}
 
 	return c.JSON(200, searchTalk)
@@ -74,7 +98,7 @@ func (api *API) getTalk(c echo.Context) error {
 
 	var talk Talk
 	err := api.Db.Model(&talk).
-		Column("talk.*", "Talk").
+		Column("talk.*").
 		Where("talk.id = ?", id).
 		Select()
 	if err != nil {
@@ -120,7 +144,7 @@ func (api *API) getUserTalk(c echo.Context) error {
 		TalkID: talkID,
 	}
 	err = api.Db.Model(&userTalk).
-		Column("usertalk.*", "UserTalk").
+		Column("usertalk.*").
 		Where("usertalk.id = ?", userID).
 		Select()
 	if err != nil {
@@ -195,7 +219,7 @@ func (api *API) getUser(c echo.Context) error {
 
 	var user User
 	err := api.Db.Model(&user).
-		Column("user.*", "User").
+		Column("user.*").
 		Where("user.id = ?", id).
 		Select()
 	if err != nil {
@@ -223,4 +247,38 @@ func (api *API) putUser(c echo.Context) error {
 	}
 
 	return c.JSON(200, user)
+}
+
+func (api *API) getYoutubeJSON(c echo.Context) error {
+	yturl := c.Param("yturl")
+
+	fullurl := "http://www.youtube.com/oembed?url=" + yturl + "&format=json"
+
+	key := "yturl-" + yturl
+	fromMc, err := api.Mc.Get(key)
+	if err != nil {
+		return err
+	}
+
+	if fromMc == nil {
+		resp, err := http.Get(fullurl)
+		if err != nil {
+			return err
+		}
+
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+
+		api.Mc.Set(&memcache.Item{
+			Key:   key,
+			Value: []byte(body),
+		})
+
+		return c.JSON(200, body)
+	} else {
+		return c.JSON(200, fromMc)
+	}
 }

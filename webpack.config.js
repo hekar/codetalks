@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const config  = {
   entry: {
-    bundle: path.join(__dirname, 'client/index.js')
+    bundle: path.join(__dirname, 'client/index')
   },
   output: {
     path: path.join(__dirname, 'server/data/static/build'),

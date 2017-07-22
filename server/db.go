@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/go-pg/pg"
 	"github.com/go-pg/pg/orm"
 )
@@ -21,6 +23,7 @@ type UserTalk struct {
 	DateViewed int64
 }
 
+// Talk model
 type Talk struct {
 	TalkID       int64
 	Name         string
@@ -29,6 +32,7 @@ type Talk struct {
 	Tags         []string
 }
 
+// TalkMeta Additional meta data relating to a talk
 type TalkMeta struct {
 	TalkID  int64
 	Length  int64
@@ -38,14 +42,25 @@ type TalkMeta struct {
 
 // CreateSchema create the database schema
 func CreateSchema(db *pg.DB) error {
-	for _, model := range []interface{}{&User{},&UserTalk{},&Talk{},&TalkMeta{}} {
-		err := db.CreateTable(model, &orm.CreateTableOptions{
-			Temp: true,
+	for _, model := range []interface{}{&User{}, &UserTalk{}, &Talk{}, &TalkMeta{}} {
+		fmt.Println("Dropping tables")
+		err := db.DropTable(model, &orm.DropTableOptions{
+			IfExists: true,
+		})
+		if err != nil {
+			return err
+		}
+
+		fmt.Println("Creating Tables")
+		err = db.CreateTable(model, &orm.CreateTableOptions{
+			Temp: false,
 		})
 		if err != nil {
 			return err
 		}
 	}
+
+	fmt.Println("Completed database creation")
 
 	user := &User{
 		Name: "This is user",
@@ -59,8 +74,8 @@ func CreateSchema(db *pg.DB) error {
 	}
 
 	talk := &Talk{
-		Name: "This is a talk",
-		Url: "https://youtube.com",
+		Name:         "This is a talk",
+		Url:          "https://youtube.com",
 		ThumbnailUrl: "http://image.example.com",
 		Tags: []string{
 			"youtube",
@@ -70,7 +85,6 @@ func CreateSchema(db *pg.DB) error {
 	if err != nil {
 		return err
 	}
-
 
 	return nil
 }

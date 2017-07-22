@@ -24,14 +24,24 @@ export default class Talks extends Component {
   }
 
   render() {
-    debugger;
     const { err, talks } = this.state;
 
     if (err) {
       return <div>Error: {err}</div>;
     } else if (talks) {
+      const rows = talks.map(talk =>{
+        const tags = talk.Tags.map(tag => <div><a href={'/tag/' + tag}>tag</a></div>);
+        return (
+          <div key={talk.TalkID}>
+            <a href={talk.Url}><img src={talk.ThumbnailUrl} /></a>
+            <a href={talk.Url}>{talk.Name}</a>
+            {tags}
+            {JSON.stringify(talk)}
+          </div>
+        );
+      });
       return <div>
-        <Grid></Grid>
+        {rows}
       </div>;
     } else {
       return <div>Loading..</div>;

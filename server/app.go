@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/elazarl/go-bindata-assetfs"
 	"github.com/go-pg/pg"
 	"github.com/itsjamie/go-bindata-templates"
@@ -80,12 +81,15 @@ func NewApp(opts ...AppOptions) *App {
 		Format: `${method} | ${status} | ${uri} -> ${latency_human}` + "\n",
 	}))
 
+	mc := memcache.New("localhost:11211")
+
 	// Initialize the application
 	app := &App{
 		Conf:   conf,
 		Engine: engine,
 		API: &API{
 			Db: db,
+			Mc: mc,
 		},
 		React: NewReact(
 			conf.UString("duktape.path"),
