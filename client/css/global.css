@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
+body {
+  --color-primary: #3D86A6;
+  --color-secondary: #95C3DA;
+  --color-glow: #C6E5F1;
+  --color-light: #ECF1F3;
+  --color-dark: #113342;
+}
+
 h1,h2,h3,h4,h5,h6,p,ul,ol,li,button,input,strong,small,em {
   margin: 0;
   padding: 0;
@@ -40,7 +48,6 @@ body {
   font-size: 16px;
 }
 
-
 html, body {
   height: 100%;
 }
@@ -63,4 +70,31 @@ img {
 
 .talk-card {
   flex: 0 1 120px;
+}
+
+.list-item {
+  display: block;
+  border: 1px solid var(--color-light);
+  padding: 16px;
+}
+
+.list-item a {
+  display: inline-block;
+  color: var(--color-dark);
+}
+
+.list-item a:hover {
+  color: var(--color-primary);
+}
+
+.list-item .thumbnail {
+  border: 2px solid var(--color-light);
+}
+
+.list-item .thumbnail:hover {
+  border: 2px solid var(--color-glow);
+}
+
+.inline-block, .inline-block a {
+  display: inline-block !important;
 }

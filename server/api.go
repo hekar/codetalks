@@ -116,7 +116,7 @@ func (api *API) putTalk(c echo.Context) error {
 		return err
 	}
 
-	if id != strconv.FormatInt(talk.TalkID, 10) {
+	if id != strconv.Itoa(talk.ID) {
 		panic("talkIDs do not match")
 	}
 
@@ -237,7 +237,7 @@ func (api *API) putUser(c echo.Context) error {
 		return err
 	}
 
-	if id != strconv.FormatInt(user.ID, 10) {
+	if id != strconv.Itoa(user.ID) {
 		panic("userIDs do not match")
 	}
 
@@ -278,7 +278,7 @@ func (api *API) getYoutubeJSON(c echo.Context) error {
 		})
 
 		return c.JSON(200, body)
-	} else {
-		return c.JSON(200, fromMc)
 	}
+
+	return c.JSON(200, fromMc)
 }
