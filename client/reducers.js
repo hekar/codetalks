@@ -1,12 +1,10 @@
 import { combineReducers } from 'redux';
-import actions from './actions';
-
-const {
+import {
   SET_CONFIG,
   LOAD_TALKS,
   SET_TALKS,
   ERROR_TALKS
-} = actions;
+} from './actions';
 
 function config(state = {}, action) {
   switch (action.type) {

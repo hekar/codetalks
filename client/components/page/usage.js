@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { setConfig } from '../../actions';
 
 class Usage extends Component {

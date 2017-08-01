@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Route, IndexRoute, Redirect } from 'react-router';
 import App from '#app/components/app';
 import Homepage from '#app/components/page/home';
 import Usage from '#app/components/page/usage';
@@ -7,6 +7,8 @@ import NotFound from '#app/components/page/not-found';
 import Search from '#app/components/page/search';
 import Register from '#app/components/page/register';
 import Talks from '#app/components/page/talks';
+
+const disableServerSideRendering = true;
 
 /**
  * Returns configured routes for different
@@ -20,7 +22,7 @@ export default ({store, first}) => {
   // Make a closure to skip first request
   function w(loader) {
     return (nextState, replaceState, callback) => {
-      if (first.time) {
+      if (!disableServerSideRendering && first.time) {
         first.time = false;
         return callback();
       }
@@ -35,8 +37,8 @@ export default ({store, first}) => {
 
   return (
     <App>
-      <Switch>
-        <Route exact path="/" component={Homepage}
+      <Route path="/" component={App}>
+        <IndexRoute component={Homepage}
           onEnter={w(Homepage.onEnter)}/>
         <Route path="/usage" component={Usage}
           onEnter={w(Usage.onEnter)}/>
@@ -45,10 +47,10 @@ export default ({store, first}) => {
         <Route path="/register" component={Register}
           onEnter={w(Register.onEnter)}/>
         <Route path="/talks" component={Talks}
-          onEnter={w(Register.onEnter)}/>
-        <Route component={NotFound}
+          onEnter={w(Talks.onEnter)}/>
+        <Route path="*" component={NotFound}
           onEnter={w(NotFound.onEnter)}/>
-      </Switch>
+      </Route>
     </App>
   );
 };

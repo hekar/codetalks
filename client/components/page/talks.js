@@ -1,30 +1,27 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
+import { searchTalks } from '../../services';
 import Grid from '../grid';
 
-export default class Talks extends Component {
+class Talks extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
-  /*eslint-disable */
-  static onEnter({store, nextState, replaceState, callback}) {
-    // Load here any data.
-    callback(); // this call is important, don't forget it
-  }
-  /*eslint-enable */
-
-  componentWillMount() {
-    fetch('/api/v1/talk')
-      .then(res => res.json())
-      .then(({ talks }) => this.setState({ talks }))
-      .catch(err => this.setState({ err }));
+  static onEnter({ store, nextState, replaceState, callback }) {
+    try {
+      searchTalks(store)
+        .then(() => callback(), callback);
+    } catch (error) {
+      callback();
+    }
   }
 
   render() {
-    const { err, talks } = this.state;
+    const { err, talks } = this.props;
 
     if (err) {
       return <div>Error: {err}</div>;
@@ -68,3 +65,5 @@ export default class Talks extends Component {
   }
 
 }
+
+export default connect(store => store)(Talks);

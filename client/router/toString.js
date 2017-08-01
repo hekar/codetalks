@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
-import { match, RouterContext } from 'react-router-dom';
+import { match, RouterContext } from 'react-router';
 import Helmet from 'react-helmet';
 import createRoutes from './routes';
 import { createStore, setAsCurrentStore } from '../store';

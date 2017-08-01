@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import TalkCard from './talk-card';
 
 export default class TalkCards extends Component {

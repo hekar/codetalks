@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { HashRouter } from 'react-router-dom';
+import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import toString from './toString';
 import { Promise } from 'when';
@@ -19,7 +19,7 @@ export function run() {
 
   render(
     <Provider store={store} >
-      <HashRouter>{createRoutes({store, first: { time: true }})}</HashRouter>
+      <Router history={browserHistory}>{createRoutes({store, first: { time: true }})}</Router>
     </Provider>,
     document.getElementById('app')
   );

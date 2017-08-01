@@ -1,6 +1,7 @@
 export const SET_CONFIG = 'SET_CONFIG';
 export const LOAD_TALKS = 'LOAD_TALKS';
 export const SET_TALKS = 'SET_TALKS';
+export const ERROR_TALKS = 'ERROR_TALKS';
 
 export function setConfig(config) {
   return { type: SET_CONFIG, config };

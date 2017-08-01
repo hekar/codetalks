@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export default class Nav extends Component {
   constructor(props) {
@@ -8,19 +8,18 @@ export default class Nav extends Component {
 
   render() {
     const pathname = this.props;
-    debugger;
     return (
       <nav className="nav">
         <div className="nav-left">
-          <NavLink className="nav-item" to={'/'}>
+          <Link className="nav-item" to={'/'}>
             CodeTalks
-          </NavLink>
-          <NavLink className="nav-item" to={'/talks'}>
+          </Link>
+          <Link className="nav-item" to={'/talks'}>
             Talks
-          </NavLink>
-          <NavLink className="nav-item" to={'/profile'}>
+          </Link>
+          <Link className="nav-item" to={'/profile'}>
             Profile
-          </NavLink>
+          </Link>
         </div>
 
         <span className="nav-toggle">

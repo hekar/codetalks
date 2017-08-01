@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import TalkCards from '../talk-cards';
 
 export default class Homepage extends Component {
