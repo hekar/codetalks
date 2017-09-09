@@ -29,7 +29,7 @@ export default class Nav extends Component {
         </span>
 
         <div className="nav-right nav-menu">
-          <form method="GET" action="/#/talks">
+          <form method="GET" action="/talks">
             <label className="label inline-block">
               <input
                 name="q"

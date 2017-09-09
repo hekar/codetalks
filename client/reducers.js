@@ -3,7 +3,10 @@ import {
   SET_CONFIG,
   LOAD_TALKS,
   SET_TALKS,
-  ERROR_TALKS
+  ERROR_TALKS,
+  LOAD_POPULAR_TALKS,
+  SET_POPULAR_TALKS,
+  ERROR_POPULAR_TALKS
 } from './actions';
 
 function config(state = {}, action) {
@@ -28,4 +31,17 @@ function talks(state = {}, action) {
   }
 }
 
-export default combineReducers({ config, talks });
+function popularTalks(state ={}, action) {
+  switch (action.type) {
+  case LOAD_POPULAR_TALKS:
+    return action.popularTalksLoading;
+  case SET_POPULAR_TALKS:
+    return action.popularTalks;
+  case ERROR_POPULAR_TALKS:
+    return action.popularTalksError;
+  default:
+    return state;
+  }
+}
+
+export default combineReducers({ config, talks, popularTalks });

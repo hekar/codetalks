@@ -6,11 +6,6 @@ import { searchTalks } from '../../services';
 import Grid from '../grid';
 
 class Talks extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   static onEnter({ store, nextState, replaceState, callback }) {
     try {
       searchTalks(store)

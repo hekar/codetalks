@@ -27,6 +27,7 @@ type SearchTalk struct {
 func (api *API) Bind(group *echo.Group) {
 	group.GET("/v1/conf", api.conf)
 
+	group.GET("/v1/talk/popular", api.listPopularTalks)
 	group.POST("/v1/talk", api.postTalk)
 	group.GET("/v1/talk", api.searchTalk)
 	group.GET("/v1/talk/:id", api.getTalk)
@@ -47,6 +48,24 @@ func (api *API) Bind(group *echo.Group) {
 func (api *API) conf(c echo.Context) error {
 	app := c.Get("app").(*App)
 	return c.JSON(200, app.Conf.Root)
+}
+
+func (api *API) listPopularTalks(c echo.Context) error {
+	var talks []Talk
+	err := api.Db.Model(&talks).
+		Column("talk.*").
+		Join("inner join talk_populars on talk_populars.talk_id = talk.id").
+		Order("talk_populars.rank ASC").
+		Select()
+	if err != nil {
+		return err
+	}
+
+	searchTalk := SearchTalk{
+		Talks: talks,
+	}
+
+	return c.JSON(200, searchTalk)
 }
 
 func (api *API) postTalk(c echo.Context) error {
@@ -74,8 +93,14 @@ func (api *API) searchTalk(c echo.Context) error {
 	// Filter title, author, rating, site, date posted
 	// Sort by rating, date posted
 	var talks []Talk
-	err = api.Db.Model(&talks).
-		Column("talk.*").
+	query := api.Db.Model(&talks).
+		Column("talk.*")
+
+	if c.QueryParam("q") != "" {
+		query = query.Where("lower(talk.name) like lower(concat('%', ?, '%'))", c.QueryParam("q"))
+	}
+
+	err = query.
 		Order("talk.name ASC").
 		Limit(limit).
 		Offset(offset).

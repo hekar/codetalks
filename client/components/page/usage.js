@@ -18,9 +18,6 @@ class Usage extends Component {
   }
   /*eslint-enable */
 
-  componentDidMount() {
-  }
-
   render() {
     const str = JSON.stringify(this.props.config, null, 2);
     return <div>
