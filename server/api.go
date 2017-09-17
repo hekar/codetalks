@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -31,7 +32,7 @@ func (api *API) Bind(group *echo.Group) {
 	group.POST("/v1/talk", api.postTalk)
 	group.GET("/v1/talk", api.searchTalk)
 	group.GET("/v1/talk/:id", api.getTalk)
-	group.PUT("/v1/talk", api.putTalk)
+	group.PUT("/v1/talk/:id", api.putTalk)
 
 	group.GET("/v1/user/:id/talk/", api.getUserTalk)
 	group.GET("/v1/user/:id/talk/:talkid", api.getUserTalk)
@@ -262,6 +263,12 @@ func (api *API) putUser(c echo.Context) error {
 		return err
 	}
 
+	fmt.Println("USER IDS")
+	fmt.Println(c.Request().URL)
+	fmt.Println(c.ParamNames())
+	fmt.Println(c.ParamValues())
+	fmt.Println(id)
+	fmt.Println(user.ID)
 	if id != strconv.Itoa(user.ID) {
 		panic("userIDs do not match")
 	}

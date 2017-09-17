@@ -11,6 +11,7 @@ import (
 
 	"strconv"
 
+	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/go-pg/pg"
 	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"
@@ -32,7 +33,11 @@ func createDb() *pg.DB {
 
 func createAPI() *API {
 	db := createDb()
-	h := &API{db}
+	mc := memcache.New("localhost:11211")
+	h := &API{
+		Db: db,
+		Mc: mc,
+	}
 	return h
 }
 
@@ -51,23 +56,24 @@ func createUser() (*User, string) {
 	return user, userJSON
 }
 
-func doRequest(method, route, body string) (echo.Context, *API, *httptest.ResponseRecorder) {
-	e := echo.New()
+func doRequest(
+	e *echo.Echo, h *API, rec *httptest.ResponseRecorder,
+	method, route, body string) echo.Context {
 	req := httptest.NewRequest(method, route,
 		strings.NewReader(body))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-	h := createAPI()
-
-	return c, h, rec
+	return e.NewContext(req, rec)
 }
 
 func TestCreateUser(t *testing.T) {
+	e := echo.New()
+	h := createAPI()
+	rec := httptest.NewRecorder()
 
 	_, userJSON := createUser()
 
-	c, h, rec := doRequest(echo.POST, "/v1/user", userJSON)
+	c := doRequest(e, h, rec,
+		echo.POST, "/v1/user", userJSON)
 
 	// Assertions
 	if assert.NoError(t, h.postUser(c)) {
@@ -77,9 +83,14 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestPutUser(t *testing.T) {
+	e := echo.New()
+	h := createAPI()
+	rec := httptest.NewRecorder()
+
 	_, userJSON := createUser()
 
-	c, h, rec := doRequest(echo.POST, "/v1/user", userJSON)
+	c := doRequest(e, h, rec,
+		echo.POST, "/v1/user", userJSON)
 	user := &User{}
 
 	h.postUser(c)
@@ -95,9 +106,11 @@ func TestPutUser(t *testing.T) {
 
 	updatedUserJSON := string(bytes)
 
-	route := "/api/v1/user/" + strconv.FormatInt(user.ID, 10)
+	route := "/api/v1/user/" + strconv.Itoa(user.ID)
 	fmt.Printf("FASDFSDF %v %v\n", route, updatedUserJSON)
-	c, h, rec = doRequest(echo.PUT, route, updatedUserJSON)
+
+	c = doRequest(e, h, rec,
+		echo.PUT, route, updatedUserJSON)
 
 	// Assertions
 	if assert.NoError(t, h.putUser(c)) {
