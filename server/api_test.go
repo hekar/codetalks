@@ -41,19 +41,20 @@ func createAPI() *API {
 	return h
 }
 
-func createUser() (*User, string) {
-	user := &User{
+func createUser() *User {
+	return &User{
 		Name:   "Bob",
 		Emails: []string{"bob"},
 	}
+}
+
+func userJson(user *User) string {
 	bytes, err := json.Marshal(user)
 	if err != nil {
 		panic(err)
 	}
 
-	userJSON := string(bytes)
-
-	return user, userJSON
+	return string(bytes)
 }
 
 func doRequest(
@@ -65,12 +66,12 @@ func doRequest(
 	return e.NewContext(req, rec)
 }
 
-func TestCreateUser(t *testing.T) {
+func TestPostUser(t *testing.T) {
 	e := echo.New()
 	h := createAPI()
 	rec := httptest.NewRecorder()
 
-	_, userJSON := createUser()
+	userJSON := userJson(createUser())
 
 	c := doRequest(e, h, rec,
 		echo.POST, "/v1/user", userJSON)
@@ -87,34 +88,19 @@ func TestPutUser(t *testing.T) {
 	h := createAPI()
 	rec := httptest.NewRecorder()
 
-	_, userJSON := createUser()
-
-	c := doRequest(e, h, rec,
-		echo.POST, "/v1/user", userJSON)
-	user := &User{}
-
-	h.postUser(c)
-
-	if err := json.Unmarshal(rec.Body.Bytes(), user); err != nil {
-		panic(err)
-	}
-
-	bytes, err := json.Marshal(user)
-	if err != nil {
-		panic(err)
-	}
-
-	updatedUserJSON := string(bytes)
+	user := createUser()
+	user.ID = 1
+	updateJson := userJson(user)
 
 	route := "/api/v1/user/" + strconv.Itoa(user.ID)
-	fmt.Printf("FASDFSDF %v %v\n", route, updatedUserJSON)
+	fmt.Printf("FASDFSDF %v %v\n", route, updateJson)
 
-	c = doRequest(e, h, rec,
-		echo.PUT, route, updatedUserJSON)
+	c := doRequest(e, h, rec,
+		echo.PUT, route, updateJson)
 
 	// Assertions
 	if assert.NoError(t, h.putUser(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
-		assert.Equal(t, updatedUserJSON, rec.Body.String())
+		assert.Equal(t, updateJson, rec.Body.String())
 	}
 }
