@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"time"
 
 	"github.com/go-pg/pg"
 	"github.com/go-pg/pg/orm"
@@ -50,14 +52,14 @@ type TalkPopular struct {
 
 // CreateSchema create the database schema
 func CreateSchema(db *pg.DB) error {
-	for i, model := range []interface{}{
+	fmt.Println("Creating schema")
+	for _, model := range []interface{}{
 		&User{},
 		&UserTalk{},
 		&Talk{},
 		&TalkMeta{},
 		&TalkPopular{},
 	} {
-		fmt.Printf("Dropping table %v\n", i)
 		err := db.DropTable(model, &orm.DropTableOptions{
 			IfExists: true,
 		})
@@ -65,7 +67,6 @@ func CreateSchema(db *pg.DB) error {
 			return err
 		}
 
-		fmt.Printf("Creating Tables %v\n", i)
 		err = db.CreateTable(model, &orm.CreateTableOptions{
 			Temp: false,
 		})
@@ -223,6 +224,15 @@ func CreateSchema(db *pg.DB) error {
 	if err != nil {
 		return err
 	}
+
+	db.OnQueryProcessed(func(event *pg.QueryProcessedEvent) {
+		query, err := event.FormattedQuery()
+		if err != nil {
+			panic(err)
+		}
+	
+		log.Printf("%s %s", time.Since(event.StartTime), query)
+	})
 
 	return nil
 }

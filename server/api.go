@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/go-pg/pg"
@@ -48,7 +49,7 @@ func (api *API) Bind(group *echo.Group) {
 
 func (api *API) conf(c echo.Context) error {
 	app := c.Get("app").(*App)
-	return c.JSON(200, app.Conf.Root)
+	return c.JSON(http.StatusOK, app.Conf.Root)
 }
 
 func (api *API) listPopularTalks(c echo.Context) error {
@@ -66,7 +67,7 @@ func (api *API) listPopularTalks(c echo.Context) error {
 		Talks: talks,
 	}
 
-	return c.JSON(200, searchTalk)
+	return c.JSON(http.StatusOK, searchTalk)
 }
 
 func (api *API) postTalk(c echo.Context) error {
@@ -80,7 +81,7 @@ func (api *API) postTalk(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(200, talk)
+	return c.JSON(http.StatusOK, talk)
 }
 
 func (api *API) searchTalk(c echo.Context) error {
@@ -97,8 +98,9 @@ func (api *API) searchTalk(c echo.Context) error {
 	query := api.Db.Model(&talks).
 		Column("talk.*")
 
-	if c.QueryParam("q") != "" {
-		query = query.Where("lower(talk.name) like lower(concat('%', ?, '%'))", c.QueryParam("q"))
+	term := strings.TrimSpace(c.QueryParam("q"))
+	if term != "" {
+		query = query.Where("lower(talk.name) like lower(concat('%', ?, '%'))", term)
 	}
 
 	err = query.
@@ -116,11 +118,15 @@ func (api *API) searchTalk(c echo.Context) error {
 		Talks:  talks,
 	}
 
-	return c.JSON(200, searchTalk)
+	return c.JSON(http.StatusOK, searchTalk)
 }
 
 func (api *API) getTalk(c echo.Context) error {
 	id := c.Param("id")
+
+	if strings.TrimSpace(id) == "" {
+		return c.String(http.StatusNotFound, "")
+	}
 
 	var talk Talk
 	err := api.Db.Model(&talk).
@@ -131,7 +137,7 @@ func (api *API) getTalk(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(200, talk)
+	return c.JSON(http.StatusOK, talk)
 }
 
 func (api *API) putTalk(c echo.Context) error {
@@ -151,7 +157,7 @@ func (api *API) putTalk(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(200, talk)
+	return c.JSON(http.StatusOK, talk)
 }
 
 func (api *API) getUserTalk(c echo.Context) error {
@@ -177,7 +183,7 @@ func (api *API) getUserTalk(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(200, userTalk)
+	return c.JSON(http.StatusOK, userTalk)
 }
 
 func (api *API) putUserTalk(c echo.Context) error {
@@ -200,7 +206,7 @@ func (api *API) putUserTalk(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(200, userTalk)
+	return c.JSON(http.StatusOK, userTalk)
 }
 
 func (api *API) deleteUserTalk(c echo.Context) error {
@@ -223,7 +229,7 @@ func (api *API) deleteUserTalk(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(200, userTalk)
+	return c.JSON(http.StatusOK, userTalk)
 }
 
 func (api *API) postUser(c echo.Context) error {
@@ -237,22 +243,28 @@ func (api *API) postUser(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(200, user)
+	return c.JSON(http.StatusCreated, user)
 }
 
 func (api *API) getUser(c echo.Context) error {
 	id := c.Param("id")
 
+	if strings.TrimSpace(id) == "" {
+		return c.String(http.StatusNotFound, "")
+	}
+
+	fmt.Printf("get user id %v\n", id)
+
 	var user User
 	err := api.Db.Model(&user).
 		Column("user.*").
-		Where("user.id = ?", id).
+		Where("\"user\".id = ?", id).
 		Select()
 	if err != nil {
 		return err
 	}
 
-	return c.JSON(200, user)
+	return c.JSON(http.StatusOK, user)
 }
 
 func (api *API) putUser(c echo.Context) error {
@@ -263,22 +275,19 @@ func (api *API) putUser(c echo.Context) error {
 		return err
 	}
 
-	fmt.Println("USER IDS")
-	fmt.Println(c.Request().URL)
-	fmt.Println(c.ParamNames())
-	fmt.Println(c.ParamValues())
-	fmt.Println(id)
-	fmt.Println(user.ID)
-	if id != strconv.Itoa(user.ID) {
-		panic("userIDs do not match")
-	}
-
-	err := api.Db.Update(user)
+	numericID, err := strconv.Atoi(id)
 	if err != nil {
 		return err
 	}
 
-	return c.JSON(200, user)
+	user.ID = numericID
+
+	err = api.Db.Update(user)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, user)
 }
 
 func (api *API) getYoutubeJSON(c echo.Context) error {
@@ -309,8 +318,8 @@ func (api *API) getYoutubeJSON(c echo.Context) error {
 			Value: []byte(body),
 		})
 
-		return c.JSON(200, body)
+		return c.JSON(http.StatusOK, body)
 	}
 
-	return c.JSON(200, fromMc)
+	return c.JSON(http.StatusOK, fromMc)
 }

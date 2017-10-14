@@ -11,8 +11,8 @@ export function searchTalks(store, params) {
   store.dispatch(loadTalks(true));
   const queryParams = new URLSearchParams(document.location.search.substring(1));
   const q = queryParams.get('q');
-
-  return fetch('/api/v1/talk?q=' + encodeURIComponent(q))
+  const qs = q ? `?q=${encodeURIComponent(q)}` : '';
+  return fetch('/api/v1/talk' + qs)
     .then(res => res.json())
     .then(({ talks }) => {
       store.dispatch(setTalks(talks));
