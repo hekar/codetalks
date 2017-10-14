@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -71,7 +70,6 @@ func doRequest(
 	req := httptest.NewRequest(method, route,
 		strings.NewReader(body))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	fmt.Printf("REQUEST URI %v\n", req.RequestURI)
 	h.Bind(e.Group("/api"))
 	context := e.NewContext(req, rec)
 	e.Router().Find(method, route, context)

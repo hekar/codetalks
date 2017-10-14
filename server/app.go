@@ -24,6 +24,7 @@ type App struct {
 	Conf   *config.Config
 	React  *React
 	API    *API
+	AuthAPI *AuthAPI
 }
 
 // NewApp returns initialized struct
@@ -91,6 +92,10 @@ func NewApp(opts ...AppOptions) *App {
 			Db: db,
 			Mc: mc,
 		},
+		AuthAPI: &AuthAPI {
+			Db: db,
+			Mc: mc,
+		},
 		React: NewReact(
 			conf.UString("duktape.path"),
 			conf.UBool("debug"),
@@ -109,11 +114,11 @@ func NewApp(opts ...AppOptions) *App {
 	})
 
 	// Bind api handling for URL api.prefix
-	app.API.Bind(
-		app.Engine.Group(
-			app.Conf.UString("api.prefix"),
-		),
-	)
+	group := app.Engine.Group(app.Conf.UString("api.prefix"))
+	group.Use(middleware.JWT([]byte(app.Conf.UString("jwt.secret"))))
+	app.API.Bind(group)
+
+	app.AuthAPI.Bind(app.Engine.Group("/"))
 
 	// Create file http server from bindata
 	fileServerHandler := http.FileServer(&assetfs.AssetFS{

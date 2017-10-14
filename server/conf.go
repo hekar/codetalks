@@ -22,4 +22,5 @@ api:
   prefix: /api
 duktape:
   path: static/build/bundle.js
-`
+jwt:
+	secret: my-secret`

@@ -20,3 +20,4 @@ import:
 - package: github.com/jteeuwen/go-bindata
 - package: github.com/go-pg/pg
 - package: github.com/go-pg/pg/orm
+- package: github.com/dgrijalva/jwt-go

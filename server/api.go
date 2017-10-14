@@ -25,10 +25,8 @@ type SearchTalk struct {
 	Talks  []Talk `json:"talks"`
 }
 
-// Bind setup the API
+// Bind register routers and group information
 func (api *API) Bind(group *echo.Group) {
-	group.GET("/v1/conf", api.conf)
-
 	group.GET("/v1/talk/popular", api.listPopularTalks)
 	group.POST("/v1/talk", api.postTalk)
 	group.GET("/v1/talk", api.searchTalk)
@@ -45,11 +43,6 @@ func (api *API) Bind(group *echo.Group) {
 	group.PUT("/v1/user/:id", api.putUser)
 
 	group.GET("/v1/yt/json", api.getYoutubeJSON)
-}
-
-func (api *API) conf(c echo.Context) error {
-	app := c.Get("app").(*App)
-	return c.JSON(http.StatusOK, app.Conf.Root)
 }
 
 func (api *API) listPopularTalks(c echo.Context) error {
