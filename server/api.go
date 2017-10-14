@@ -81,7 +81,7 @@ func (api *API) postTalk(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, talk)
+	return c.JSON(http.StatusCreated, talk)
 }
 
 func (api *API) searchTalk(c echo.Context) error {

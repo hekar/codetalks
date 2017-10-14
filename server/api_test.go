@@ -47,8 +47,17 @@ func createUser() *User {
 	}
 }
 
-func userJson(user *User) string {
-	bytes, err := json.Marshal(user)
+func createTalk() *Talk {
+	return &Talk{
+		Name: "Bob",
+		URL: "http://google.ca",
+		ThumbnailURL: "http://google.ca",
+		Tags: []string{ "tag" },
+	}
+}
+
+func bodyJson(i interface{}) string {
+	bytes, err := json.Marshal(i)
 	if err != nil {
 		panic(err)
 	}
@@ -85,7 +94,7 @@ func TestGetUser(t *testing.T) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, expected, rec.Body.String())
 	}
-}	
+}
 
 func TestPostUser(t *testing.T) {
 	e := echo.New()
@@ -94,7 +103,7 @@ func TestPostUser(t *testing.T) {
 
 	user := createUser()
 	user.ID = 2
-	userJSON := userJson(user)
+	userJSON := bodyJson(user)
 
 	c := doRequest(e, h, rec,
 		echo.POST, "/api/v1/user", userJSON)
@@ -112,7 +121,7 @@ func TestPutUser(t *testing.T) {
 
 	user := createUser()
 	user.ID = 1
-	expected := userJson(user)
+	expected := bodyJson(user)
 
 	route := "/api/v1/user/" + strconv.Itoa(user.ID)
 
@@ -135,7 +144,7 @@ func TestGetTalk(t *testing.T) {
 
 	c := doRequest(e, h, rec,
 		echo.GET, route, "")
-	
+
 	expected := "{\"id\":1,\"name\":\"Bjarne Stroustrup - The Essence of C++\",\"url\":\"https://www.youtube.com/watch?v=86xWVb4XIyE\",\"thumbnailUrl\":\"https://i.ytimg.com/an_webp/86xWVb4XIyE/mqdefault_6s.webp?du=3000\\u0026sqp=CKb708sF\\u0026rs=AOn4CLDgRM5ZQwHj8tre1P0MLtd84ZGw4w\",\"tags\":[\"cpp\"]}"
 	if assert.NoError(t, h.getTalk(c)) {
 		actual := rec.Body.String()
@@ -143,7 +152,7 @@ func TestGetTalk(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	}
 }
-	
+
 func TestListTalk(t *testing.T) {
 	e := echo.New()
 	h := createAPI()
@@ -193,6 +202,50 @@ func TestListPopularTalks(t *testing.T) {
 
 	expected := "{\"limit\":0,\"offset\":0,\"talks\":[{\"id\":3,\"name\":\"Progressive, Performant, Polymer: Pick Three - Google I/O 2016\",\"url\":\"https://www.youtube.com/watch?v=J4i0xJnQUzU\\u0026index=2\\u0026list=PL00z3DSeZW7wDVgFVboA-5rBwkI-8WT_R\",\"thumbnailUrl\":\"https://i.ytimg.com/vi/J4i0xJnQUzU/hqdefault.jpg?sqp=-oaymwEWCKgBEF5IWvKriqkDCQgBFQAAiEIYAQ==\\u0026rs=AOn4CLCg9ScmRIx1VdTWzpEIumVVL3SYQw\",\"tags\":[\"google\",\"polymer\",\"web\"]},{\"id\":2,\"name\":\"Tech Talk: Linus Torvalds on git\",\"url\":\"https://www.youtube.com/watch?v=4XpnKHJAok8\",\"thumbnailUrl\":\"https://i.ytimg.com/vi/4XpnKHJAok8/hqdefault.jpg?sqp=-oaymwEXCPYBEIoBSFryq4qpAwkIARUAAIhCGAE=\\u0026rs=AOn4CLAlzaJGQnDKZxr4ufeSuaLDOamRjg\",\"tags\":[\"linus\",\"git\"]},{\"id\":1,\"name\":\"Bjarne Stroustrup - The Essence of C++\",\"url\":\"https://www.youtube.com/watch?v=86xWVb4XIyE\",\"thumbnailUrl\":\"https://i.ytimg.com/an_webp/86xWVb4XIyE/mqdefault_6s.webp?du=3000\\u0026sqp=CKb708sF\\u0026rs=AOn4CLDgRM5ZQwHj8tre1P0MLtd84ZGw4w\",\"tags\":[\"cpp\"]}]}"
 	if assert.NoError(t, h.listPopularTalks(c)) {
+		actual := rec.Body.String()
+		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestPostTalk(t *testing.T) {
+	e := echo.New()
+	h := createAPI()
+	rec := httptest.NewRecorder()
+
+	route := "/api/v1/talk"
+
+	talk := createTalk()
+	talk.ID = 50
+	body := bodyJson(talk)
+
+	c := doRequest(e, h, rec,
+		echo.POST, route, body)
+
+	expected := "{\"id\":50,\"name\":\"Bob\",\"url\":\"http://google.ca\",\"thumbnailUrl\":\"http://google.ca\",\"tags\":[\"tag\"]}"
+	if assert.NoError(t, h.postTalk(c)) {
+		actual := rec.Body.String()
+		assert.Equal(t, http.StatusCreated, rec.Code)
+		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestPutTalk(t *testing.T) {
+	e := echo.New()
+	h := createAPI()
+	rec := httptest.NewRecorder()
+
+	route := "/api/v1/talk/1"
+
+	talk := createTalk()
+	talk.ID = 1
+	body := bodyJson(talk)
+
+	c := doRequest(e, h, rec,
+		echo.POST, route, body)
+
+	expected := "{\"id\":1,\"name\":\"Bob\",\"url\":\"http://google.ca\",\"thumbnailUrl\":\"http://google.ca\",\"tags\":[\"tag\"]}"
+	if assert.NoError(t, h.putTalk(c)) {
 		actual := rec.Body.String()
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, expected, actual)

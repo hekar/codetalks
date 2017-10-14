@@ -11,14 +11,14 @@ import (
 
 // User model for database
 type User struct {
-	ID     int      `json:"id"`
+	ID     int      `json:"id",sql:"type:serial"`
 	Name   string   `json:"name"`
 	Emails []string `json:"emails"`
 }
 
 // UserTalk model for database
 type UserTalk struct {
-	ID         int    `json:"id"`
+	ID         int    `json:"id",sql:"type:serial"`
 	UserID     int  `json:"userId"`
 	TalkID     int  `json:"talkId"`
 	Status     int  `json:"status"` // 0 - plan to watch, 1 completed, 2 watching, 3 dropped
@@ -28,7 +28,7 @@ type UserTalk struct {
 
 // Talk model
 type Talk struct {
-	ID           int      `json:"id"`
+	ID           int      `json:"id",sql:"type:serial"`
 	Name         string   `json:"name"`
 	URL          string   `json:"url"`
 	ThumbnailURL string   `json:"thumbnailUrl"`
@@ -37,7 +37,7 @@ type Talk struct {
 
 // TalkMeta Additional meta data relating to a talk
 type TalkMeta struct {
-	ID      int    `json:"id"`
+	ID      int    `json:"id",sql:"type:serial"`
 	Length  int  `json:"length"`
 	Author  string `json:"author"`
 	Summary string `json:"summary"`
@@ -45,7 +45,7 @@ type TalkMeta struct {
 
 // TalkPopular List of popular talks
 type TalkPopular struct {
-	ID     int `json:"id"`
+	ID     int `json:"id",sql:"type:serial"`
 	TalkID int `json:"talkId"`
 	Rank   int `json:"rank"`
 }
