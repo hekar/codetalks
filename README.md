@@ -1,5 +1,7 @@
 # CodeTalks
 
+[![work in progress](https://img.shields.io/badge/work%20in-progress-brightred.svg?style=flat)](https://en.wikipedia.org/wiki/Work_in_process)
+
 ## Install
 
 Clone the repo:
