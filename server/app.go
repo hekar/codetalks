@@ -115,10 +115,10 @@ func NewApp(opts ...AppOptions) *App {
 
 	// Bind api handling for URL api.prefix
 	group := app.Engine.Group(app.Conf.UString("api.prefix"))
-	group.Use(middleware.JWT([]byte(app.Conf.UString("jwt.secret"))))
+	// group.Use(middleware.JWT([]byte(app.Conf.UString("jwt.secret"))))
 	app.API.Bind(group)
 
-	app.AuthAPI.Bind(app.Engine.Group("/"))
+	app.AuthAPI.Bind(app.Engine.Group("/auth"))
 
 	// Create file http server from bindata
 	fileServerHandler := http.FileServer(&assetfs.AssetFS{
