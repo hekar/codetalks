@@ -5,8 +5,8 @@
 Clone the repo:
 
 ```
-$ git clone git@github.com:olebedev/go-starter-kit.git $GOPATH/src/github.com/<username>/<project>
-$ cd $GOPATH/src/github.com/<username>/<project>
+$ git clone git@github.com:hekar/codetalks.git $GOPATH/src/github.com/hekar/codetalks
+$ cd $GOPATH/src/github.com/hekar/codetalks
 ```
 
 Install dependencies:
@@ -23,11 +23,11 @@ Start dev server:
 $ make serve
 ```
 
-that's it. Open [http://localhost:5001/](http://localhost:5001/)(if you use default port) at your browser. Now you ready to start coding your awesome project.
+[http://localhost:5001/](http://localhost:5001/) 
 
 ## Build
 
 Install dependencies and type `NODE_ENV=production make build`. This rule is producing webpack build and regular golang build after that. Result you can find at `$GOPATH/bin`. Note that the binary will be named **as the current project directory**.
 
 ## License
-MIT
+[MIT](./LICENSE)
