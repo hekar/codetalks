@@ -161,12 +161,12 @@ func (api *API) putTalk(c echo.Context) error {
 }
 
 func (api *API) getUserTalk(c echo.Context) error {
-	userID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	userID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return err
 	}
 
-	talkID, err := strconv.ParseInt(c.Param("talkid"), 10, 64)
+	talkID, err := strconv.Atoi(c.Param("talkid"))
 	if err != nil {
 		return err
 	}
@@ -187,12 +187,12 @@ func (api *API) getUserTalk(c echo.Context) error {
 }
 
 func (api *API) putUserTalk(c echo.Context) error {
-	userID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	userID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return err
 	}
 
-	talkID, err := strconv.ParseInt(c.Param("talkid"), 10, 64)
+	talkID, err := strconv.Atoi(c.Param("talkid"))
 	if err != nil {
 		return err
 	}
@@ -210,12 +210,12 @@ func (api *API) putUserTalk(c echo.Context) error {
 }
 
 func (api *API) deleteUserTalk(c echo.Context) error {
-	userID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	userID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return err
 	}
 
-	talkID, err := strconv.ParseInt(c.Param("talkid"), 10, 64)
+	talkID, err := strconv.Atoi(c.Param("talkid"))
 	if err != nil {
 		return err
 	}

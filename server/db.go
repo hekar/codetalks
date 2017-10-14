@@ -19,11 +19,11 @@ type User struct {
 // UserTalk model for database
 type UserTalk struct {
 	ID         int    `json:"id"`
-	UserID     int64  `json:"userId"`
-	TalkID     int64  `json:"talkId"`
-	Status     int64  `json:"status"` // 0 - plan to watch, 1 completed, 2 watching, 3 dropped
+	UserID     int  `json:"userId"`
+	TalkID     int  `json:"talkId"`
+	Status     int  `json:"status"` // 0 - plan to watch, 1 completed, 2 watching, 3 dropped
 	Comments   string `json:"comments"`
-	DateViewed int64  `json:"dateViewed"`
+	DateViewed int  `json:"dateViewed"`
 }
 
 // Talk model
@@ -38,7 +38,7 @@ type Talk struct {
 // TalkMeta Additional meta data relating to a talk
 type TalkMeta struct {
 	ID      int    `json:"id"`
-	Length  int64  `json:"length"`
+	Length  int  `json:"length"`
 	Author  string `json:"author"`
 	Summary string `json:"summary"`
 }
