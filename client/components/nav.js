@@ -17,9 +17,6 @@ export default class Nav extends Component {
           <Link className="nav-item" to={'/talks'}>
             Talks
           </Link>
-          <Link className="nav-item" to={'/profile'}>
-            Profile
-          </Link>
         </div>
 
         <span className="nav-toggle">
@@ -44,7 +41,7 @@ export default class Nav extends Component {
           </form>
           &nbsp;
           <Link className="button is-primary"
-            to={'/search'}>Sign in</Link>
+            to={'/signin'}>Sign in</Link>
           &nbsp;
           <Link className="button is-dark"
             to={'/register'}>Register</Link>

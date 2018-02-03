@@ -7,6 +7,7 @@ import NotFound from '#app/components/page/not-found';
 import Search from '#app/components/page/search';
 import Register from '#app/components/page/register';
 import Talks from '#app/components/page/talks';
+import Signin from '../components/page/signin';
 
 const disableServerSideRendering = true;
 
@@ -46,6 +47,8 @@ export default ({store, first}) => {
           onEnter={w(Search.onEnter)}/>
         <Route path="/register" component={Register}
           onEnter={w(Register.onEnter)}/>
+        <Route path="/signin" component={Signin}
+          onEnter={w(Signin.onEnter)}/>
         <Route path="/talks" component={Talks}
           onEnter={w(Talks.onEnter)}/>
         <Route path="*" component={NotFound}

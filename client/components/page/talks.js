@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router';
 import { searchTalks } from '../../services';
+import Pagination from '../pagination';
 import Grid from '../grid';
 
 class Talks extends Component {
@@ -53,6 +54,7 @@ class Talks extends Component {
           </div>
         </div> */}
         {rows}
+        <Pagination />
       </div>;
     } else {
       return <div>Loading..</div>;

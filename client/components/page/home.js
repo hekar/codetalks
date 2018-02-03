@@ -25,6 +25,7 @@ class Homepage extends Component {
     } else {
       return (
         <div>
+          <h2 className="title is-2">Popular</h2>
           <TalkCards cards={cards}></TalkCards>
         </div>
       );
@@ -47,7 +48,7 @@ class Homepage extends Component {
       </p>
       <div className="block">
         <Link className="button is-primary"
-          to={'/search'}>Sign in</Link>&nbsp;
+          to={'/signin'}>Sign in</Link>&nbsp;
         <Link className="button is-dark"
           to={'/register'}>Register</Link>
       </div>

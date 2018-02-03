@@ -81,7 +81,7 @@ func NewApp(opts ...AppOptions) *App {
 		Format: `${method} | ${status} | ${uri} -> ${latency_human}` + "\n",
 	}))
 
-	mc := memcache.New("localhost:11211")
+	mc := memcache.New("127.0.0.1:11211")
 
 	// Initialize the application
 	app := &App{

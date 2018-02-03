@@ -25,11 +25,9 @@ export default class TalkCard extends Component {
     } = this.props.card;
     return (
       <div className="card talk-card">
-        <header className="card-header">
-          <p className="card-header-title">
-            {title}
-          </p>
-        </header>
+        <p className="card-header-title">
+          <a href={link}>{linkTitle}</a>
+        </p>
         <div className="card-content">
           <div className="content">
             <p>{content}</p>
