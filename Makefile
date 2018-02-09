@@ -18,6 +18,8 @@ GLIDE         := $(shell command -v glide 2> /dev/null)
 
 build: $(ON) $(GO_BINDATA) clean $(TARGET)
 
+bs: $(TARGET)
+
 clean:
 	@rm -rf server/data/static/build/*
 	@rm -rf server/data/bundle.server.js
@@ -40,7 +42,7 @@ kill:
 
 serve: $(ON) $(GO_BINDATA) clean $(BUNDLE) restart
 	@BABEL_ENV=dev node hot.proxy &
-	@$(NODE_BIN)/webpack --watch &
+	@$(NODE_BIN)/webpack --watch --progress --colors &
 	@$(ON) -m 2 $(GO_FILES) $(TEMPLATES) | xargs -n1 -I{} make restart || make kill
 
 restart: BINDATA_FLAGS += -debug

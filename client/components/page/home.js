@@ -36,12 +36,10 @@ class Homepage extends Component {
     return <div>
       <Helmet
         title='Codetalks'
-        meta={[
-          {
-            property: 'og:title',
-            content: 'Track and List your Tech Talk History'
-          }
-        ]} />
+        meta={[{
+          property: 'og:title',
+          content: 'Track and List your Tech Talk History'
+        }]} />
       <h1 className="title is-1"><a href="/">Codetalks</a></h1>
       <p>
         Find, review and keep track of the Tech Talks.

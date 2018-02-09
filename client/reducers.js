@@ -1,6 +1,12 @@
 import { combineReducers } from 'redux';
 import {
   SET_CONFIG,
+  LOAD_TALK,
+  SET_TALK,
+  ERROR_TALK,
+  LOAD_TALK_PROFILE,
+  SET_TALK_PROFILE,
+  ERROR_TALK_PROFILE,
   LOAD_TALKS,
   SET_TALKS,
   ERROR_TALKS,
@@ -31,6 +37,25 @@ function talks(state = {}, action) {
   }
 }
 
+function talk(state = {}, action) {
+  switch (action.type) {
+  case LOAD_TALK:
+    return Object.assign({}, state, { talkLoading: action.talkLoading });
+  case SET_TALK:
+    return Object.assign({}, state, { talk: action.talk });
+  case ERROR_TALK:
+    return Object.assign({}, state, { errorTalk: action.errorTalk });
+  case LOAD_TALK_PROFILE:
+    return Object.assign({}, state, { profileLoading: action.loading });
+  case SET_TALK_PROFILE:
+    return Object.assign({}, state, { profile: action.profile });
+  case ERROR_TALK_PROFILE:
+    return Object.assign({}, state, { errorProfile: action.error });
+  default:
+    return state;
+  }
+}
+
 function popularTalks(state ={}, action) {
   switch (action.type) {
   case LOAD_POPULAR_TALKS:
@@ -44,4 +69,4 @@ function popularTalks(state ={}, action) {
   }
 }
 
-export default combineReducers({ config, talks, popularTalks });
+export default combineReducers({ config, talks, talk, popularTalks });

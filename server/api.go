@@ -34,6 +34,7 @@ func (api *API) Bind(group *echo.Group) {
 	group.GET("/v1/talk", api.searchTalk)
 	group.GET("/v1/talk/:id", api.getTalk)
 	group.PUT("/v1/talk/:id", api.putTalk)
+	group.GET("/v1/talk/:id/profile", api.getTalkProfile)
 
 	group.GET("/v1/user/:id/talk/", api.getUserTalk)
 	group.GET("/v1/user/:id/talk/:talkid", api.getUserTalk)
@@ -158,6 +159,25 @@ func (api *API) putTalk(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, talk)
+}
+
+func (api *API) getTalkProfile(c echo.Context) error {
+	id := c.Param("id")
+
+	if strings.TrimSpace(id) == "" {
+		return c.String(http.StatusNotFound, "")
+	}
+
+	var talkProfile TalkProfile
+	err := api.Db.Model(&talkProfile).
+		Column("talk_profile.*").
+		Where("talk_profile.talk_id = ?", id).
+		Select()
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, talkProfile)
 }
 
 func (api *API) getUserTalk(c echo.Context) error {

@@ -6,6 +6,7 @@ import Usage from '#app/components/page/usage';
 import NotFound from '#app/components/page/not-found';
 import Search from '#app/components/page/search';
 import Register from '#app/components/page/register';
+import Talk from '#app/components/page/talk';
 import Talks from '#app/components/page/talks';
 import Signin from '../components/page/signin';
 
@@ -49,6 +50,8 @@ export default ({store, first}) => {
           onEnter={w(Register.onEnter)}/>
         <Route path="/signin" component={Signin}
           onEnter={w(Signin.onEnter)}/>
+        <Route path="/talk/:talkId" component={Talk}
+          onEnter={w(Talk.onEnter)}/>
         <Route path="/talks" component={Talks}
           onEnter={w(Talks.onEnter)}/>
         <Route path="*" component={NotFound}

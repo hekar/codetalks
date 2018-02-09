@@ -1,4 +1,10 @@
 import {
+  loadTalk,
+  setTalk,
+  errorTalk,
+  loadTalkProfile,
+  setTalkProfile,
+  errorTalkProfile,
   loadTalks,
   setTalks,
   errorTalks,
@@ -28,5 +34,30 @@ export function popularTalks(store, params) {
       console.log('talks', talks);
       store.dispatch(setPopularTalks(talks));
     })
-    .catch(err => store.dispatch(errorPopularTalks(err)));
+    .catch(err => store.dispatch(errorPopularTalks(err)))
+    .catch(() => store.dispatch(loadPopularTalks(false)));
+}
+
+export function getTalk(store, params) {
+  const { talkId } = params;
+  store.dispatch(loadTalk(true));
+  return fetch(`/api/v1/talk/${talkId}`)
+    .then(res => res.json())
+    .then((talk) => {
+      store.dispatch(setTalk(talk));
+    })
+    .catch(err => store.dispatch(errorTalk(err)))
+    .finally(() => store.dispatch(loadTalk(false)));
+}
+
+export function getTalkProfile(store, params) {
+  const { talkId } = params;
+  store.dispatch(loadTalkProfile(true));
+  return fetch(`/api/v1/talk/${talkId}/profile`)
+    .then(res => res.json())
+    .then((profile) => {
+      store.dispatch(setTalkProfile(profile));
+    })
+    .catch(err => store.dispatch(errorTalkProfile(err)))
+    .finally(() => store.dispatch(loadTalkProfile(false)));
 }
