@@ -36,7 +36,7 @@ export default class Pagination extends Component {
       pages.splice(pages.length - 1, 0, (<li key="-2">{separator}</li>));
     }
     return (
-      <nav className="pfagination" role="navigation" aria-label="pagination">
+      <nav className="pagination" role="navigation" aria-label="pagination">
         <ul className="pagination-list">
           {pages}
         </ul>

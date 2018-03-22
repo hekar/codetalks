@@ -12,7 +12,10 @@ import {
   ERROR_TALKS,
   LOAD_POPULAR_TALKS,
   SET_POPULAR_TALKS,
-  ERROR_POPULAR_TALKS
+  ERROR_POPULAR_TALKS,
+  LOAD_RECENTLY_ADDED_TALKS,
+  SET_RECENTLY_ADDED_TALKS,
+  ERROR_RECENTLY_ADDED_TALKS  
 } from './actions';
 
 function config(state = {}, action) {
@@ -69,4 +72,17 @@ function popularTalks(state ={}, action) {
   }
 }
 
-export default combineReducers({ config, talks, talk, popularTalks });
+function recentlyAddedTalks(state = {}, action) {
+  switch (action.type) {
+  case LOAD_RECENTLY_ADDED_TALKS:
+    return action.recentlyAddedTalksLoading;
+  case SET_RECENTLY_ADDED_TALKS:
+    return action.recentlyAddedTalks;
+  case ERROR_RECENTLY_ADDED_TALKS:
+    return action.recentlyAddedTalksError;
+  default:
+    return state;
+  }
+}
+
+export default combineReducers({ config, talks, talk, popularTalks, recentlyAddedTalks });

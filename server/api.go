@@ -30,6 +30,7 @@ func (api *API) Bind(group *echo.Group) {
 	group.GET("/v1/conf", api.conf)
 
 	group.GET("/v1/talk/popular", api.listPopularTalks)
+	group.GET("/v1/talk/recently_added", api.listRecentlyAddedTalks)
 	group.POST("/v1/talk", api.postTalk)
 	group.GET("/v1/talk", api.searchTalk)
 	group.GET("/v1/talk/:id", api.getTalk)
@@ -59,6 +60,24 @@ func (api *API) listPopularTalks(c echo.Context) error {
 		Column("talk.*").
 		Join("inner join talk_populars on talk_populars.talk_id = talk.id").
 		Order("talk_populars.rank ASC").
+		Select()
+	if err != nil {
+		return err
+	}
+
+	searchTalk := SearchTalk{
+		Talks: talks,
+	}
+
+	return c.JSON(http.StatusOK, searchTalk)
+}
+
+func (api *API) listRecentlyAddedTalks(c echo.Context) error {
+	var talks []Talk
+	err := api.Db.Model(&talks).
+		Column("talk.*").
+		Order("talk.id DESC").
+		Limit(15).
 		Select()
 	if err != nil {
 		return err

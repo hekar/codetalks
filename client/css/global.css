@@ -1,28 +1,44 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
-@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('https://use.fontawesome.com/releases/v5.0.8/css/solid.css');
+@import url('https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css');
 
 body {
-  --color-primary: #3D86A6;
-  --color-secondary: #95C3DA;
+  --color-alabaster: #F8F7F7;
+  --color-polo-blue: #7D9CC6;
+  --color-picton-blue: #53C8E8;
+  --color-dark-accent: #4F798F;
+  --color-cloud-burst: #232E5A;
+
+  --color-primary: var(--color-picton-blue);
+  --color-secondary: var(--color-alabaster);
   --color-glow: #C6E5F1;
-  --color-light: #ECF1F3;
-  --color-dark: #113342;
+  --color-light: var(--color-polo-blue);
+  --color-dark: var(--color-cloud-burst);
 }
 
 html {
   font-family: 'Noto Sans', Helvetica;
 }
 
-body {
-  font-size: 16px;
-}
-
 html, body {
   height: 100%;
+  font-size: 14px;
+}
+
+a {
+  text-decoration: inherit;
 }
 
 img {
   max-width: 100%;
+}
+
+form {
+  margin-bottom: 0;
+}
+
+label {
+  margin-bottom: 0;  
 }
 
 *, :before, :after {
@@ -31,11 +47,6 @@ img {
 
 .app-content {
   min-height: 100vh;
-}
-
-.talk-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .list-item {
@@ -62,5 +73,58 @@ img {
 }
 
 .inline-block, .inline-block a {
-  display: inline-block !important;
+  display: inline-block;
+}
+
+#app {
+  margin: auto;
+  max-width: 1320px;
+}
+
+.nav.bar.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 12px 0;
+}
+
+.nav.bar .links {
+  list-style: none;
+  margin: 0;
+}
+
+.nav.bar .links li {
+  display: inline;
+  text-decoration: none;
+  vertical-align: middle;
+  font-size: 1.25rem;
+  padding-left: 12px;
+}
+
+.nav.bar .links li:first {
+  margin-left: 0;
+  padding-left: 0;
+}  
+
+.page.home .grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+}
+
+.page.search .grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+}
+
+.talk-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 12px 6px;
+}
+
+.card {
+  padding: 24px 18px;
+  -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
 }

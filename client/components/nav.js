@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import { faSignInAlt, faUserCircle } from '@fortawesome/fontawesome-free-solid'
 
 export default class Nav extends Component {
   constructor(props) {
@@ -9,25 +11,15 @@ export default class Nav extends Component {
   render() {
     const pathname = this.props;
     return (
-      <nav className="nav">
-        <div className="nav-left">
-          <Link className="nav-item" to={'/'}>
-            CodeTalks
-          </Link>
-          <Link className="nav-item" to={'/talks'}>
-            Talks
-          </Link>
-        </div>
+      <nav className="nav bar grid">
+        <ul className="links">
+          <li><Link className="nav-item" to={'/'}>CodeTalks</Link></li>
+          <li><Link className="nav-item" to={'/talks'}>Talks</Link></li>
+        </ul>
 
-        <span className="nav-toggle">
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
-
-        <div className="nav-right nav-menu">
-          <form method="GET" action="/talks">
-            <label className="label inline-block">
+        <div>
+          <form method="GET" action="/talks" className="inline-block">
+            <label className="inline-block">
               <input
                 name="q"
                 className="input"
@@ -35,16 +27,16 @@ export default class Nav extends Component {
                 placeholder="Search..." />
             </label>
             <input
-              className="inline-block button is-black"
+              className="inline-block"
               type="submit"
               value="Search" />
           </form>
           &nbsp;
-          <Link className="button is-primary"
-            to={'/signin'}>Sign in</Link>
+          <Link className="inline-block button is-primary"
+            to={'/signin'}><FontAwesomeIcon icon={faSignInAlt}/> Sign in</Link>
           &nbsp;
-          <Link className="button is-dark"
-            to={'/register'}>Register</Link>
+          <Link className="inline-block button is-dark"
+            to={'/register'}><FontAwesomeIcon icon={faUserCircle}/> Register</Link>
         </div>
       </nav>
     );

@@ -11,6 +11,9 @@ export const ERROR_TALKS = 'ERROR_TALKS';
 export const LOAD_POPULAR_TALKS = 'LOAD_POPULAR_TALKS';
 export const SET_POPULAR_TALKS = 'SET_POPULAR_TALKS';
 export const ERROR_POPULAR_TALKS = 'ERROR_POPULAR_TALKS';
+export const LOAD_RECENTLY_ADDED_TALKS = 'LOAD_RECENTLY_ADDED_TALKS';
+export const SET_RECENTLY_ADDED_TALKS = 'SET_RECENTLY_ADDED_TALKS';
+export const ERROR_RECENTLY_ADDED_TALKS = 'ERROR_RECENTLY_ADDED_TALKS';
 
 export function setConfig(config) {
   return { type: SET_CONFIG, config };
@@ -62,4 +65,16 @@ export function setPopularTalks(popularTalks) {
 
 export function errorPopularTalks(popularTalksError) {
   return { type: ERROR_POPULAR_TALKS, popularTalksError };
+}
+
+export function loadRecentlyAddedTalks(recentlyAddedTalksLoading) {
+  return { type: LOAD_RECENTLY_ADDED_TALKS, recentlyAddedTalksLoading };
+}
+
+export function setRecentlyAddedTalks(recentlyAddedTalks) {
+  return { type: SET_RECENTLY_ADDED_TALKS, recentlyAddedTalks };
+}
+
+export function errorRecentlyAddedTalks(recentlyAddedTalksError) {
+  return { type: ERROR_RECENTLY_ADDED_TALKS, recentlyAddedTalksError };
 }

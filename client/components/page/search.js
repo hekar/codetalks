@@ -12,12 +12,14 @@ export default class Search extends Component {
 
   render() {
     return (
-      <div>
+      <div className="page search">
         <Helmet title='Codetalks - Search' />
-        <h1>Search</h1>
-        <input type="text" placeholder="search"/>
-        <div className="block">
-          <a className="button">Button</a>
+        <div className="grid">
+          <h1>Search</h1>
+          <input type="text" placeholder="search"/>
+          <div className="block">
+            <a className="button">Button</a>
+          </div>
         </div>
       </div>
     );

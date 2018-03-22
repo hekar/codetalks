@@ -10,7 +10,10 @@ import {
   errorTalks,
   loadPopularTalks,
   setPopularTalks,
-  errorPopularTalks
+  errorPopularTalks,
+  loadRecentlyAddedTalks,
+  setRecentlyAddedTalks,
+  errorRecentlyAddedTalks
 } from './actions';
 
 export function searchTalks(store, params) {
@@ -36,6 +39,18 @@ export function popularTalks(store, params) {
     })
     .catch(err => store.dispatch(errorPopularTalks(err)))
     .catch(() => store.dispatch(loadPopularTalks(false)));
+}
+
+export function recentlyAddedTalks(store, params) {
+  store.dispatch(loadRecentlyAddedTalks(true));
+  return fetch('/api/v1/talk/recently_added')
+    .then(res => res.json())
+    .then(({ talks }) => {
+      console.log('talks', talks);
+      store.dispatch(setRecentlyAddedTalks(talks));
+    })
+    .catch(err => store.dispatch(errorRecentlyAddedTalks(err)))
+    .catch(() => store.dispatch(loadRecentlyAddedTalks(false)));
 }
 
 export function getTalk(store, params) {

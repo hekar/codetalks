@@ -1,3 +1,2 @@
-require('normalize.css');
+require('./beauter.min.css');
 require('./global.css');
-require('bulma/css/bulma.css');

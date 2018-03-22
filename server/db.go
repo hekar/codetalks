@@ -210,6 +210,18 @@ func CreateSchema(db *pg.DB) error {
 		Rank:   1,
 	}))
 
+	Must(db.Insert(&TalkPopular{
+		ID:     4,
+		TalkID: 4,
+		Rank:   1,
+	}))
+
+	Must(db.Insert(&TalkPopular{
+		ID:     5,
+		TalkID: 5,
+		Rank:   1,
+	}))
+
 	db.OnQueryProcessed(func(event *pg.QueryProcessedEvent) {
 		query, err := event.FormattedQuery()
 		if err != nil {
